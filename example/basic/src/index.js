@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import VanillaJoi from 'joi';
 import JoiFk from 'joi-fk-extension';
 import JoiUniqueValue from 'joi-unique-value-extension';
-import shed from 'shed';
+import { Nav, Repository, GenericRoute, Validation } from 'react-auto-edit';
 import './index.css';
 
 const Joi = VanillaJoi
@@ -42,7 +42,7 @@ const data = {
     { speciesId: 3, name: 'African Elephant' },
   ],
   animals: [
-    { animalId: 'timtiger', name: 'Timothy', speciesId: 1, 
+    { animalId: 'tim.tiger', name: 'Timothy', speciesId: 1, 
       nickname: 'Tim',
       offspring: [{ animalId: 'tessatiger' }],
     },
@@ -51,14 +51,14 @@ const data = {
   ]
 };
 
-const repository = new shed.Repository(schema, data);
+const repository = new Repository(schema, data);
 
 function App() {
   return (
     <Router>
-      <shed.Nav repository={repository}/>
-      <shed.Validation repository={repository}/>
-      <shed.GenericRoute repository={repository}/>
+      <Nav repository={repository}/>
+      <Validation repository={repository}/>
+      <GenericRoute repository={repository}/>
     </Router>
   );
 }

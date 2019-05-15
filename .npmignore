@@ -1,2 +1,4 @@
 .eslintrc
 .babelrc
+example/
+__tests__

@@ -10,16 +10,13 @@ import EditField from './fieldEditors/EditField';
 import Repository from './Repository';
 import fieldEditors from './fieldEditors';
 
-export default {
-  Cancel,
-  Save,
-  Validation,
-  GenericRoute,
-  Nav,
-  EditArrayItem,
-  EditObjectItem,
-  EditItem,
-  EditField,
-  Repository,
-  fieldEditors,
-};
+export {Nav};
+export {Save};
+export {Validation};
+export {GenericRoute};
+export {EditArrayItem};
+export {EditObjectItem};
+export {EditItem};
+export {EditField};
+export {Repository};
+export {fieldEditors};

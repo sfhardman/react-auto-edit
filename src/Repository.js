@@ -73,7 +73,7 @@ class Repository {
 
     const newItem = utils.newItem(arraySchema.items[0]);
     collection.push(newItem);
-    const newObjectPath = `${objectPath}.[NEW-${collection.length - 1}]`;
+    const newObjectPath = `${objectPath}.["+++${collection.length - 1}"]`;
     this.setDirty();
     return newObjectPath;
   }

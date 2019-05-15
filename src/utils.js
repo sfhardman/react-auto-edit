@@ -1,3 +1,7 @@
+import splitString from 'split-string';
+
+const split = value => splitString(value, { quotes: ['"'] });
+
 const getNextPath = pathChunks => pathChunks
   .filter((chunk, index) => index > 0)
   .join('.');
@@ -19,7 +23,7 @@ const getFkPaths = (fieldSchema) => {
 };
 
 const getSchemaForPath = (path, schema) => {
-  const pathChunks = path.split('.').filter(chunk => !!chunk);
+  const pathChunks = split(path).filter(chunk => !!chunk);
   if (pathChunks.length === 0) {
     return schema;
   }
@@ -52,7 +56,7 @@ const pksMatch = (candidate, pkValues, itemSchema) => Object
   .every((fieldName, index) => candidate[fieldName] == pkValues[index]);
 
 const getItemForPath = (path, schema, data) => {
-  const pathChunks = path.split('.').filter(chunk => !!chunk);
+  const pathChunks = split(path).filter(chunk => !!chunk);
   if (pathChunks.length === 0) {
     return data;
   }
@@ -76,11 +80,10 @@ const getItemForPath = (path, schema, data) => {
       return result.length ? result : null;
     }
     // looking for a single value by primary keys in square brackets
-    const pkValues = currentChunk.substring(1, currentChunk.length - 1)
-      .split(',');
+    const pkValues = JSON.parse(currentChunk);
     let match;
-    if ((pkValues.length === 1) && (pkValues[0].startsWith('NEW-'))) {
-      const index = pkValues[0].split('-')[1];
+    if ((pkValues.length === 1) && (pkValues[0].startsWith('+++'))) {
+      const index = pkValues[0].substring(3);
       match = data[index];
     } else {
       match = data.find(m => pksMatch(m, pkValues, schema.items[0]));
@@ -109,9 +112,8 @@ const getArrayItemPath = (item, parentSchema, parentPath) => {
   const pks = Object.getOwnPropertyNames(itemSchema.children)
     .filter(fieldName => fieldIsPk(itemSchema.children[fieldName]))
     .map(fieldName => item[fieldName])
-    .filter(fieldValue => !!fieldValue)
-    .join(',');
-  return `${parentPath}.[${pks}]`;
+    .filter(fieldValue => !!fieldValue);
+  return `${parentPath}.${JSON.stringify(pks)}`;
 };
 
 const getItemDisplayName = (item, itemSchema) => {
@@ -144,26 +146,28 @@ const getItemId = (item, itemSchema) => {
   return 'unknown';
 };
 
-const getParentPath = path => path
-  .split('.')
+const getParentPath = path => split(path)
   .filter((item, index, array) => index < (array.length - 1))
   .join('.');
 
 const urlPathToDotPath = (urlPath) => {
-  const parts = urlPath.split('/');
+  const parts = splitString(urlPath, {
+    separator: '/',
+    quotes: ['"'],
+  });
   return parts.join('.');
 };
 
 const dotPathToUrlPath = (dotPath) => {
-  const parts = dotPath.split('.');
+  const parts = split(dotPath);
   return ['', ...parts].join('/');
 };
 
 const dotPathIsNewItem = (dotPath) => {
-  const parts = dotPath.split('.');
+  const parts = split(dotPath);
   return parts.length
-    && parts[parts.length - 1].startsWith('[NEW-')
-    && parts[parts.length - 1].endsWith(']');
+    && parts[parts.length - 1].startsWith('["+++')
+    && parts[parts.length - 1].endsWith('"]');
 };
 
 const newItem = (itemSchema) => {
@@ -206,7 +210,7 @@ const removeItem = (itemPath, schema, data) => {
 };
 
 const itemIsInArray = (itemPath) => {
-  const parts = itemPath.split('.');
+  const parts = split(itemPath);
   return parts.length
     && parts[parts.length - 1].startsWith('[')
     && parts[parts.length - 1].endsWith(']');
@@ -218,7 +222,7 @@ const initialiseArray = (arrayPath, schema, data) => {
     schema,
     data,
   );
-  const fieldName = arrayPath.split('.').pop();
+  const fieldName = split(arrayPath).pop();
   parentItem[fieldName] = [];
 };
 
@@ -270,7 +274,7 @@ const joiPathToDotPath = (joiPath, schema, data, dotPath = []) => {
     // eslint-disable-next-line prefer-destructuring
     itemSchema = schema.items[0];
     const arrayItemDotPath = getArrayItemPath(item, schema, dotPath.join('.'));
-    nextDotPath = arrayItemDotPath.split('.');
+    nextDotPath = split(arrayItemDotPath);
   } else {
     itemSchema = schema.children[currentChunk];
     nextDotPath = dotPath.slice();

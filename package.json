@@ -1,10 +1,10 @@
 {
-  "name": "shed",
-  "version": "1.0.0",
+  "name": "react-auto-edit",
+  "version": "1.0.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "babel src -d lib"
   },
   "author": "",
@@ -18,7 +18,10 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jest": "^22.3.2",
-    "eslint-plugin-react": "^7.13.0"
+    "eslint-plugin-react": "^7.13.0",
+    "jest": "^24.8.0",
+    "joi": "^14.3.1",
+    "joi-fk-extension": "^2.0.0"
   },
   "peerDependencies": {
     "react": "^16.0.0",
@@ -27,5 +30,13 @@
     "joi": "^14.0.0",
     "mobx": "^5.0.0",
     "mobx-react": "^5.0.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/*.js"
+    ]
+  },
+  "dependencies": {
+    "split-string": "^6.1.0"
   }
 }
