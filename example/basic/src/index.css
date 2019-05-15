@@ -1,0 +1,57 @@
+.shed-nav-link {
+  display: inline;
+  margin: 4px;
+}
+
+.shed-field-name {
+  display: inline-block;
+  margin: 4px;
+}
+
+.shed-field-input {
+  display: inline-block;
+  margin: 4px;
+}
+
+.shed-field-desc {
+  display: inline-block;
+  margin: 4px;
+  font-style: italic;
+}
+
+.shed-array-controls div {
+  display: inline-block;
+  margin: 10px;
+}
+
+.shed-array-item div {
+  display: inline-block;
+}
+
+.shed-field-error {
+  color: red;
+}
+
+.shed-field-input.required::after {
+  content: '*';
+}
+
+.shed-validation-failed {
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  margin: 4px;
+  padding: 4px;
+}
+
+.shed-array-add {
+  cursor: pointer;
+}
+
+.shed-array-remove {
+  cursor: pointer;
+}
+
+.shed-object-remove {
+  cursor: pointer;
+}
