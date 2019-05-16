@@ -158,9 +158,9 @@ const urlPathToDotPath = (urlPath) => {
   return parts.join('.');
 };
 
-const dotPathToUrlPath = (dotPath) => {
+const dotPathToUrlPath = (dotPath, basePath = '') => {
   const parts = split(dotPath);
-  return ['', ...parts].join('/');
+  return [basePath, ...parts].join('/');
 };
 
 const dotPathIsNewItem = (dotPath) => {

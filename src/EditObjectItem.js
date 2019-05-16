@@ -14,13 +14,16 @@ class EditObjectItem extends React.Component {
     this.props.history.push(
       utils.dotPathToUrlPath(
         utils.getParentPath(this.props.objectPath),
+        this.props.basePath || '',
       ),
     );
     this.props.repository.removeItems([this.props.objectPath]);
   }
 
   render() {
-    const { objectPath, itemSchema, repository } = this.props;
+    const {
+      objectPath, itemSchema, repository, basePath = '',
+    } = this.props;
     if (!repository.detailIsLoaded(objectPath)) {
       return <div>Loading...</div>;
     }
@@ -49,6 +52,7 @@ class EditObjectItem extends React.Component {
           objectPath={objectPath} isNewItem={isNewItem}
           errors={fieldErrors}
           repository={repository}
+          basePath={basePath}
           onChange={() => repository.setDirty()}/>;
       });
     let removeButton;

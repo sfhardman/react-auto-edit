@@ -4,7 +4,7 @@ import utils from './utils';
 import EditObjectItem from './EditObjectItem';
 import EditArrayItem from './EditArrayItem';
 
-const editItem = ({ repository, urlPath }) => {
+const editItem = ({ repository, urlPath, basePath = '' }) => {
   const { schemaDescription } = repository;
   const objectPath = utils.urlPathToDotPath(urlPath);
 
@@ -12,11 +12,13 @@ const editItem = ({ repository, urlPath }) => {
   let view;
   if (itemSchema.type === 'array') {
     view = <EditArrayItem
-      itemSchema={itemSchema} objectPath={objectPath} repository={repository} />;
+      itemSchema={itemSchema} objectPath={objectPath}
+      basePath={basePath} repository={repository} />;
   }
   if (itemSchema.type === 'object') {
     view = <EditObjectItem
-      itemSchema={itemSchema} objectPath={objectPath} repository={repository} />;
+      itemSchema={itemSchema} objectPath={objectPath}
+      basePath={basePath} repository={repository} />;
   }
   return <div className="shed-edit-item">
     {view}

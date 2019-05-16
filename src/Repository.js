@@ -20,7 +20,7 @@ class Repository {
 
   clearDirty() {
     this.modelState.isDirty = false;
-    this.validate();
+    this.modelState.errors.clear();
   }
 
   // eslint-disable-next-line no-unused-vars

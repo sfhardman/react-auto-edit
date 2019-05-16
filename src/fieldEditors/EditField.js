@@ -13,7 +13,7 @@ import utils from '../utils';
 const editField = ({
   item, fieldName, fieldSchema, objectPath,
   isNewItem, onChange, errors, repository,
-  fullSchema,
+  fullSchema, basePath = '',
 }) => {
   const readonly = utils.fieldIsPk(fieldSchema)
     && !isNewItem;
@@ -41,10 +41,10 @@ const editField = ({
     input = <BooleanEditField item={item} fieldName={fieldName} onChange={onChange}/>;
   } else if ((fieldSchema.type === 'array') && (fieldSchema.items[0].type === 'object')) {
     input = <ObjectArrayEditField item={item} objectPath={objectPath}
-      fieldName={fieldName} fieldSchema={fieldSchema}/>;
+      fieldName={fieldName} fieldSchema={fieldSchema} basePath={basePath}/>;
   } else if (fieldSchema.type === 'object') {
     input = <ObjectEditField item={item} objectPath={objectPath}
-      fieldName={fieldName} fieldSchema={fieldSchema}/>;
+      fieldName={fieldName} fieldSchema={fieldSchema} basePath={basePath}/>;
   }
   let inputClassName = 'shed-field-input';
 

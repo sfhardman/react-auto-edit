@@ -25,10 +25,10 @@ class EditArrayItem extends React.Component {
     const data = this.props.repository.getSummary(this.props.objectPath);
     if (!data) {
       utils.initialiseArray(this.props.objectPath,
-        this.props.repository.schemaDescription, this.props.repository.model);
+        this.props.repository.schemaDescription, this.props.repository.data);
     }
     const newObjectPath = this.props.repository.addItem(this.props.objectPath);
-    this.props.history.push(utils.dotPathToUrlPath(newObjectPath));
+    this.props.history.push(utils.dotPathToUrlPath(newObjectPath, this.props.basePath || ''));
   }
 
   removeItems() {
@@ -45,7 +45,9 @@ class EditArrayItem extends React.Component {
   }
 
   render() {
-    const { objectPath, itemSchema, repository } = this.props;
+    const {
+      objectPath, itemSchema, repository, basePath = '',
+    } = this.props;
     if (!repository.summaryIsLoaded(objectPath)) {
       return <div>Loading...</div>;
     }
@@ -60,7 +62,7 @@ class EditArrayItem extends React.Component {
             onChange={(event) => { this.checkboxChanged(event, itemPath); }}
           />
           <Link
-            to={utils.dotPathToUrlPath(itemPath)}>
+            to={utils.dotPathToUrlPath(itemPath, basePath)}>
             <div>
               {utils.getItemDisplayName(item, itemSchema.items[0])}
             </div>

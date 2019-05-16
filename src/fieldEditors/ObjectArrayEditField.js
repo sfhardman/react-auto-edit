@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import utils from '../utils';
 
-const objectArrayEditField = ({ objectPath, fieldName }) => {
+const objectArrayEditField = ({ objectPath, fieldName, basePath = '' }) => {
   let dotPath;
   if (objectPath) {
     dotPath = `${objectPath}.${fieldName}`;
@@ -13,7 +13,7 @@ const objectArrayEditField = ({ objectPath, fieldName }) => {
 
   return <Link
     className="shed-array-link"
-    to={utils.dotPathToUrlPath(dotPath)}>
+    to={utils.dotPathToUrlPath(dotPath, basePath)}>
       <div>View...</div>
     </Link>;
 };
