@@ -54,6 +54,9 @@ class EditArrayItem extends React.Component {
     const data = repository.getSummary(this.props.objectPath);
 
     const items = (data || [])
+      .sort((a, b) => utils.getItemDisplayName(a, itemSchema.items[0]).localeCompare(
+        utils.getItemDisplayName(b, itemSchema.items[0])
+      ))
       .map((item, index) => {
         const itemPath = utils.getArrayItemPath(item, itemSchema, objectPath);
 

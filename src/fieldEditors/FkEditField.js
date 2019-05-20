@@ -36,6 +36,15 @@ class FkEditField extends React.Component {
       }
     });
     const options = fkOptions
+      .sort((a, b) => {
+        if (!a.id) {
+          return -1;
+        }
+        if (!b.id) {
+          return 1;
+        }
+        return a.name.localeCompare(b.name);
+      })
       .map((opt, index) => <option value={opt.id} key={index}>{opt.name}</option>);
     return <select value={item[fieldName]}
       disabled={readonly}
