@@ -9,7 +9,7 @@ const cancel = ({ repository }) => {
     </div>;
   }
   return <div className="shed-cancel-control disabled">
-    cancel
+    Cancel
   </div>;
 };
 

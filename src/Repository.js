@@ -2,6 +2,10 @@ import { observable } from 'mobx';
 import Joi from 'joi';
 import utils from './utils';
 
+// validation can take a lot of resources
+// so make sure we don't do it on every keystroke
+const validationIntervalMs = 250;
+
 class Repository {
   constructor(schema, data = {}) {
     this.schema = schema;
@@ -11,15 +15,17 @@ class Repository {
       isDirty: false,
       errors: [],
     });
+    window.setTimeout(() => this.validateIfNeeded(), validationIntervalMs);
   }
 
   setDirty() {
     this.modelState.isDirty = true;
-    this.validate();
+    this.needValidation = true;
   }
 
   clearDirty() {
     this.modelState.isDirty = false;
+    this.needValidation = false;
     this.modelState.errors.clear();
   }
 
@@ -85,18 +91,28 @@ class Repository {
     this.setDirty();
   }
 
+  validateIfNeeded() {
+    if (this.needValidation) {
+      this.needValidation = false;
+      this.validate();
+    }
+    window.setTimeout(() => this.validateIfNeeded(), validationIntervalMs);
+  }
+
   validate() {
     const validationResult = Joi.validate(
       this.data,
       this.schema,
       {
-        context: this.data,
+        context: {
+          data: this.data,
+        },
         abortEarly: false,
       },
     );
     if (validationResult.error) {
       this.modelState.errors.replace(validationResult.error.details);
-    } else {
+    } else if (this.modelState.errors.length) {
       this.modelState.errors.clear();
     }
   }

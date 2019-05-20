@@ -90,6 +90,26 @@ describe('utils', () => {
       expect(result).toBeTruthy();
       expect(result.id).toBe('fr.ed');
     });
+    it('handles numeric ids', () => {
+      const schema = Joi.object({
+        people: Joi.array().items({
+          id: Joi.number().tags('PK'),
+        }),
+      });
+      const data = {
+        people: [
+          { id: 1 },
+          { id: 2 },
+        ],
+      };
+      const result = utils.getItemForPath(
+        'people.[2]',
+        schema.describe(),
+        data,
+      );
+      expect(result).toBeTruthy();
+      expect(result.id).toBe(2);
+    });
     it('handles new items', () => {
       const schema = Joi.object({
         people: Joi.array().items({

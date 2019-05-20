@@ -4,8 +4,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import VanillaJoi from 'joi';
 import JoiFk from 'joi-fk-extension';
 import JoiUniqueValue from 'joi-unique-value-extension';
-import { Nav, Repository, GenericRoute, Validation } from 'react-auto-edit';
-import './index.css';
+import { Nav, Repository, GenericRoute, Validation, Save, Cancel } from 'react-auto-edit';
+import 'react-auto-edit/example.css';
 
 const Joi = VanillaJoi
   .extend(JoiFk.fkNumber)
@@ -51,13 +51,25 @@ const data = {
   ]
 };
 
-const repository = new Repository(schema, data);
+class MyRepository extends Repository {
+  async save() {
+    alert('I don\'t do anything in this example');
+  }
+
+  async cancel() {
+    alert('I don\'t do anything in this example');
+  }
+}
+
+const repository = new MyRepository(schema, data);
 
 function App() {
   return (
     <Router>
       <Nav repository={repository}/>
       <Validation repository={repository}/>
+      <Save repository={repository}/>
+      <Cancel repository={repository}/>
       <GenericRoute repository={repository}/>
     </Router>
   );

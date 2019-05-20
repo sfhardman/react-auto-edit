@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import utils from './utils';
 
-const validation = ({ repository }) => {
+const validation = ({ repository, basePath = '' }) => {
   const { schemaDescription } = repository;
   let validationOutput;
   if (repository.modelState.errors.length) {
@@ -12,7 +12,7 @@ const validation = ({ repository }) => {
         const dotPath = utils
           .joiPathToDotPath(err.path, schemaDescription, repository.data);
         return <div key={index}>
-          <Link to={utils.dotPathToUrlPath(dotPath)}>{err.message}</Link>
+          <Link to={utils.dotPathToUrlPath(dotPath, basePath)}>{err.message}</Link>
         </div>;
       });
     validationOutput = <div className="shed-validation-failed">

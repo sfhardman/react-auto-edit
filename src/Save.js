@@ -9,7 +9,7 @@ const save = ({ repository }) => {
     </div>;
   }
   return <div className="shed-save-control disabled">
-    save
+    Save
   </div>;
 };
 

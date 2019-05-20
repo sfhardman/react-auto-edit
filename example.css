@@ -1,0 +1,241 @@
+body {
+  margin: 0px;
+  background-color: #E8E8E8;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+.shed-nav-links {
+  display: block;
+  background-color: lightgray;
+  margin: 0px;
+  padding: 4px;
+  border-bottom-style: solid;
+  border-width: 1px;
+  border-color: black;
+}
+
+.shed-nav-link {
+  display: inline-block;
+  margin: 4px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  background-color: white;
+  padding: 4px;
+}
+
+a .shed-nav-link {
+  color: black;
+}
+
+a:hover .shed-nav-link {
+  background-color: gray;
+  color: white;
+}
+
+a.shed-array-link {
+  text-decoration: none;
+}
+
+a.shed-array-link div {
+  border-style: solid;
+  border-width: 1px;
+  padding: 2px;
+  display: inline-block;
+  color: black;
+}
+
+a:hover.shed-array-link div {
+  background-color: gray;
+  border-style: solid;
+  border-width: 1px;
+  padding: 2px;
+  color: white;
+}
+
+
+.shed-edit-item {
+  background-color: white;
+  margin: 8px;
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+  padding-bottom: 10px;
+}
+
+.shed-field-name {
+  display: inline-block;
+  margin: 4px;
+  width: 110px;
+}
+
+.shed-field-input {
+  display: inline-block;
+  margin: 4px;
+  width: 200px;
+}
+
+.shed-field-input select {
+  width: 180px;
+}
+
+.shed-field-input textarea {
+  height: 100px;
+}
+
+.shed-field-desc {
+  display: inline-block;
+  margin: 4px;
+  font-style: italic;
+  max-width: calc(40%);
+  vertical-align: top;
+}
+
+.shed-array-controls div {
+  display: inline-block;
+  margin: 10px;
+}
+
+.shed-array-item div {
+  display: inline-block;
+}
+
+.shed-field-error {
+  color: darkred;
+}
+
+.shed-field-input.required::after {
+  content: '*';
+}
+
+.shed-validation-failed {
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  background-color: white;
+  margin: 8px;
+  padding: 4px;
+}
+
+.shed-validation-failed div {
+  margin: 4px;
+  border-style: solid;
+  border-width: 1px;
+  padding: 4px;
+  background-color: #E8E8E8;
+}
+
+.shed-validation-failed div:hover {
+  background-color: gray;
+  color: white;
+}
+
+.shed-validation-failed a {
+  text-decoration: none;
+  font-style: italic;
+  color: darkred;
+}
+
+.shed-validation-failed a:hover {
+  color: white;
+}
+
+.shed-array-add {
+  cursor: pointer;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  padding: 0px 4px 0px 4px;
+}
+
+.shed-array-add:hover {
+  background-color: gray;
+  color: white;
+}
+
+.shed-array-remove {
+  cursor: pointer;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  padding: 0px 4px 0px 4px;
+}
+
+.shed-array-remove:hover {
+  background-color: gray;
+  color: white;
+}
+
+.shed-array-item a div {
+  text-decoration: none;
+  color: black;
+}
+
+.shed-array-item a:hover div {
+  color: gray;
+}
+
+.shed-object-remove {
+  display: inline-block;
+  cursor: pointer;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  padding: 0px 4px 0px 4px;
+  margin: 4px;
+}
+
+.shed-object-remove:hover {
+  background-color: gray;
+  color: white;
+}
+
+.shed-save-control {
+  display: inline-block;
+  cursor: pointer;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  padding: 4px;
+  margin: 4px;
+  background-color: white;
+}
+
+.shed-save-control.disabled {
+  color: gray;
+}
+
+.shed-save-control:hover {
+  background-color: gray;
+  color: white;
+}
+
+.shed-save-control.disabled:hover {
+  background-color: white;
+  color: gray;
+}
+
+.shed-cancel-control {
+  display: inline-block;
+  cursor: pointer;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  padding: 4px;
+  margin: 4px;
+  background-color: white;
+}
+
+.shed-cancel-control.disabled {
+  color: gray;
+}
+
+.shed-cancel-control:hover {
+  background-color: gray;
+  color: white;
+}
+
+.shed-cancel-control.disabled:hover {
+  background-color: white;
+  color: gray;
+}

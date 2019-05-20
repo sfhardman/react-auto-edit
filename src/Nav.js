@@ -20,7 +20,7 @@ const nav = ({ repository, basePath = '' }) => {
           </div>
         </Link>;
     }));
-  return <div>
+  return <div className="shed-nav-links">
     {links}
   </div>;
 };

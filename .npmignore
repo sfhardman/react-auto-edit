@@ -1,4 +1,5 @@
 .eslintrc
 .babelrc
 example/
+coverage/
 __tests__

@@ -22,13 +22,16 @@ const getFkPaths = (fieldSchema) => {
   return [fkPath];
 };
 
+const chunkIsArray = chunk => chunk.startsWith
+  && chunk.startsWith('[') && chunk.endsWith(']');
+
 const getSchemaForPath = (path, schema) => {
   const pathChunks = split(path).filter(chunk => !!chunk);
   if (pathChunks.length === 0) {
     return schema;
   }
   const currentChunk = pathChunks[0];
-  if ((schema.type === 'array') && currentChunk.startsWith('[') && currentChunk.endsWith(']')) {
+  if ((schema.type === 'array') && chunkIsArray(currentChunk)) {
     return getSchemaForPath(getNextPath(pathChunks), schema.items[0]);
   }
   if (schema.type === 'object') {
@@ -61,7 +64,7 @@ const getItemForPath = (path, schema, data) => {
     return data;
   }
   const currentChunk = pathChunks[0];
-  if ((schema.type === 'array') && currentChunk.startsWith('[') && currentChunk.endsWith(']')) {
+  if ((schema.type === 'array') && chunkIsArray(currentChunk)) {
     if (currentChunk === '[]') {
       // looking for all matching values, not a single value
       const result = [];
@@ -82,7 +85,7 @@ const getItemForPath = (path, schema, data) => {
     // looking for a single value by primary keys in square brackets
     const pkValues = JSON.parse(currentChunk);
     let match;
-    if ((pkValues.length === 1) && (pkValues[0].startsWith('+++'))) {
+    if ((pkValues.length === 1) && pkValues[0].startsWith && (pkValues[0].startsWith('+++'))) {
       const index = pkValues[0].substring(3);
       match = data[index];
     } else {
