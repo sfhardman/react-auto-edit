@@ -59,6 +59,9 @@ const pksMatch = (candidate, pkValues, itemSchema) => Object
   .every((fieldName, index) => candidate[fieldName] == pkValues[index]);
 
 const getItemForPath = (path, schema, data) => {
+  if (typeof data === 'undefined') {
+    return null;
+  }
   const pathChunks = split(path).filter(chunk => !!chunk);
   if (pathChunks.length === 0) {
     return data;
