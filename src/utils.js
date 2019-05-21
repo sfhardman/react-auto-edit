@@ -211,6 +211,9 @@ const removeItem = (itemPath, schema, data) => {
     schema,
     data,
   );
+  if (!item) {
+    throw new Error(`${itemPath} was not found in collection`);
+  }
   const index = collection.indexOf(item);
   collection.splice(index, 1);
 };

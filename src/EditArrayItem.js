@@ -8,14 +8,13 @@ class EditArrayItem extends React.Component {
   constructor(props) {
     super(props);
     this.selectedItems = observable([]);
+    this.filter = observable({
+      value: '',
+    });
   }
 
   componentDidMount() {
     this.props.repository.loadSummary(this.props.objectPath);
-    // utils.getFkPathsForArrayMembers(
-    //   this.props.objectPath,
-    //   repository.schemaDescription,
-    // ).forEach(fkPath => repository.loadSummary(utils.getParentPath(fkPath)));
     this.addItem = this.addItem.bind(this);
     this.removeItems = this.removeItems.bind(this);
     this.checkboxChanged = this.checkboxChanged.bind(this);
@@ -54,28 +53,34 @@ class EditArrayItem extends React.Component {
     const data = repository.getSummary(this.props.objectPath);
 
     const items = (data || [])
-      .sort((a, b) => utils.getItemDisplayName(a, itemSchema.items[0]).localeCompare(
-        utils.getItemDisplayName(b, itemSchema.items[0])
-      ))
-      .map((item, index) => {
-        const itemPath = utils.getArrayItemPath(item, itemSchema, objectPath);
-
-        return <div className="shed-array-item" key={index}>
-          <input type="checkbox" checked={this.selectedItems.includes(itemPath)}
-            onChange={(event) => { this.checkboxChanged(event, itemPath); }}
+      .map(item => ({
+        displayName: utils.getItemDisplayName(item, itemSchema.items[0]),
+        itemPath: utils.getArrayItemPath(item, itemSchema, objectPath),
+      }))
+      .filter(item => (!this.filter.value)
+        || item.displayName.toUpperCase().includes(this.filter.value.toUpperCase()))
+      .sort((a, b) => a.displayName.localeCompare(b.displayName))
+      .map((item, index) => <div className="shed-array-item" key={index}>
+          <input type="checkbox" checked={this.selectedItems.includes(item.itemPath)}
+            onChange={(event) => { this.checkboxChanged(event, item.itemPath); }}
           />
           <Link
-            to={utils.dotPathToUrlPath(itemPath, basePath)}>
+            to={utils.dotPathToUrlPath(item.itemPath, basePath)}>
             <div>
-              {utils.getItemDisplayName(item, itemSchema.items[0])}
+              {item.displayName}
             </div>
           </Link>
-        </div>;
-      });
+        </div>);
     return <div className="shed-array-view">
     <div className="shed-array-controls">
       <div className="shed-array-count">
         {items.length === 1 ? '1 Item' : `${items.length} Items`}
+      </div>
+      <div className="shed-array-filter">
+        <input type="text" placeholder="Filter..."
+          value={this.filter.value}
+          onChange={(event) => { this.filter.value = event.target.value; }}
+        />
       </div>
       <div className="shed-array-add"
         onClick={() => this.addItem()}>+</div>

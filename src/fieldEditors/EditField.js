@@ -8,6 +8,7 @@ import BooleanEditField from './BooleanEditField';
 import FkEditField from './FkEditField';
 import ObjectArrayEditField from './ObjectArrayEditField';
 import ObjectEditField from './ObjectEditField';
+import DateEditField from './DateEditField';
 import utils from '../utils';
 
 const editField = ({
@@ -24,6 +25,9 @@ const editField = ({
       fullSchema={fullSchema}/>;
   } else if (fieldSchema.type === 'number') {
     input = <NumberEditField item={item} fieldName={fieldName}
+      readonly={readonly} onChange={onChange}/>;
+  } else if (fieldSchema.type === 'date') {
+    input = <DateEditField item={item} fieldName={fieldName}
       readonly={readonly} onChange={onChange}/>;
   } else if (fieldSchema.type === 'string') {
     const maxLengthRule = fieldSchema.rules && fieldSchema.rules.find(r => r.name === 'max');
