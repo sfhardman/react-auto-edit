@@ -5,9 +5,19 @@ import EditField from './fieldEditors/EditField';
 import utils from './utils';
 
 class EditObjectItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.remove = this.remove.bind(this);
+  }
+
   componentDidMount() {
     this.props.repository.loadDetail(this.props.objectPath);
-    this.remove = this.remove.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.objectPath !== this.props.objectPath) {
+      this.props.repository.loadSummary(this.props.objectPath);
+    }
   }
 
   remove() {

@@ -218,6 +218,17 @@ describe('utils', () => {
       }, schema.describe());
       expect(result).toEqual('a');
     });
+    it('returns ??? as a last resort', () => {
+      const schema = Joi.object({
+        id1: Joi.string(),
+        other: Joi.string(),
+      });
+      const result = utils.getItemDisplayName({
+        id1: undefined,
+        other: 'c',
+      }, schema.describe());
+      expect(result).toEqual('???');
+    });
   });
   // describe('sort', () => {
   //   it('sorts on the name field', () => {

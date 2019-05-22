@@ -39,7 +39,7 @@ describe('Repository', () => {
       expect(result.count).toEqual(10);
       expect(result.page).toEqual(1);
       expect(result.totalPages).toEqual(4);
-      expect(result.item).toMatchObject([
+      expect(result.array).toMatchObject([
         { personId: 2, name: 'a' },
         { personId: 3, name: 'b' },
         { personId: 5, name: 'd' },
@@ -52,7 +52,7 @@ describe('Repository', () => {
       expect(result.count).toEqual(10);
       expect(result.page).toEqual(4);
       expect(result.totalPages).toEqual(4);
-      expect(result.item).toMatchObject([
+      expect(result.array).toMatchObject([
         { personId: 1, name: 'z' },
       ]);
     });
@@ -63,6 +63,25 @@ describe('Repository', () => {
       expect(result.count).toEqual(10);
       expect(result.page).toEqual(1);
       expect(result.totalPages).toEqual(2);
+    });
+    it('returns correct page count with zero results', () => {
+      const repo = new Repository(schema, { people: [] }, 5);
+      const result = repo.getSummary('people', itemSchema, 1);
+
+      expect(result.count).toEqual(0);
+      expect(result.page).toEqual(1);
+      expect(result.totalPages).toEqual(1);
+    });
+    it('filters results correctly', () => {
+      const repo = new Repository(schema, data, 3);
+      const result = repo.getSummary('people', itemSchema, 1, 'a');
+
+      expect(result.count).toEqual(1);
+      expect(result.page).toEqual(1);
+      expect(result.totalPages).toEqual(1);
+      expect(result.array).toMatchObject([
+        { personId: 2, name: 'a' },
+      ]);
     });
   });
 });

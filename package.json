@@ -21,7 +21,7 @@
     "eslint-plugin-react": "^7.13.0",
     "jest": "^24.8.0",
     "joi": "^14.3.1",
-    "joi-fk-extension": "^2.1.3",
+    "joi-fk-extension": "^2.1.4",
     "mobx": "^5.9.4"
   },
   "peerDependencies": {
@@ -30,6 +30,7 @@
     "react-router-dom": "^5.0.0",
     "joi": "^14.0.0",
     "joi-fk-extension": "^2.1.3",
+    "react-select": "^2.4.3",
     "mobx": "^5.0.0",
     "mobx-react": "^5.0.0"
   },
