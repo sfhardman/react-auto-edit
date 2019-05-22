@@ -1,5 +1,5 @@
 {
-  "name": "basic",
+  "name": "in-memory-dataset",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,10 +9,11 @@
     "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",
     "react": "^16.8.6",
+    "react-auto-edit": "file:../..",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
-    "react-auto-edit": "file:../.."
+    "react-select": "^2.4.3"
   },
   "scripts": {
     "start": "react-scripts start",

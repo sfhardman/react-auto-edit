@@ -42,12 +42,27 @@ class Repository {
     return true;
   }
 
+  ensureArray(objectPath) {
+    const item = utils.getItemForPath(objectPath, this.schemaDescription, this.data);
+    if (!item) {
+      utils.initialiseArray(objectPath, this.schemaDescription, this.data);
+    }
+  }
+
   getSummary(objectPath, itemSchema, pageNumber, filterValue) {
+    if (!(objectPath && itemSchema)) {
+      throw new Error('objectPath and itemSchema must be supplied');
+    }
     // assuming all data gets loaded into repository._data
     // and we just need to pick it out
     const item = utils.getItemForPath(objectPath, this.schemaDescription, this.data);
-    if (!Array.isArray(item)) {
-      return item;
+    if (!item) {
+      return {
+        array: undefined,
+        totalPages: 1,
+        page: pageNumber,
+        count: 0,
+      };
     }
     const array = item
       .map(x => ({
@@ -62,11 +77,15 @@ class Repository {
     if (pageNumber) {
       const minIndex = (pageNumber * this.pageSize) - this.pageSize;
       const maxIndex = minIndex + this.pageSize - 1;
+      let totalPages = Math.ceil(array.length / this.pageSize);
+      if (totalPages === 0) {
+        totalPages = 1;
+      }
       return {
         count: array.length,
         page: pageNumber,
-        totalPages: Math.ceil(array.length / this.pageSize),
-        item: array.filter((x, index) => (index >= minIndex) && (index <= maxIndex)),
+        totalPages,
+        array: array.filter((x, index) => (index >= minIndex) && (index <= maxIndex)),
       };
     }
     return array;
@@ -93,6 +112,7 @@ class Repository {
   }
 
   addItem(objectPath) {
+    this.ensureArray(objectPath);
     const collection = utils
       .getItemForPath(
         objectPath,

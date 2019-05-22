@@ -26,11 +26,6 @@ class EditArrayItem extends React.Component {
     const {
       objectPath, repository, basePath = '', history,
     } = this.props;
-    const data = repository.getSummary(objectPath);
-    if (!data) {
-      utils.initialiseArray(objectPath,
-        repository.schemaDescription, repository.data);
-    }
     const newObjectPath = repository.addItem(objectPath);
     history.push(utils.dotPathToUrlPath(newObjectPath, basePath || ''));
   }
@@ -63,7 +58,7 @@ class EditArrayItem extends React.Component {
     const data = repository.getSummary(objectPath, itemSchema.items[0],
       this.filter.page, this.filter.value);
 
-    const items = data.item
+    const items = (data.array || [])
       .map(item => ({
         displayName: utils.getItemDisplayName(item, itemSchema.items[0]),
         itemPath: utils.getArrayItemPath(item, itemSchema, objectPath),

@@ -144,7 +144,8 @@ const getItemDisplayName = (item, itemSchema) => {
   }
 
   // first field of object should be better than nothing...
-  return item[Object.getOwnPropertyNames(itemSchema.children)[0]];
+  const firstFieldValue = item[Object.getOwnPropertyNames(itemSchema.children)[0]];
+  return firstFieldValue || '???';
 };
 
 const getItemId = (item, itemSchema) => {
