@@ -5,6 +5,9 @@ import VanillaJoi from 'joi';
 import JoiFk from 'joi-fk-extension';
 import JoiUniqueValue from 'joi-unique-value-extension';
 import { Nav, Repository, GenericRoute, Validation, Save, Cancel } from 'react-auto-edit';
+import cities from './cities';
+import people from './people';
+
 import 'react-auto-edit/example.css';
 
 const Joi = VanillaJoi
@@ -14,41 +17,46 @@ const Joi = VanillaJoi
   .extend(JoiUniqueValue.uniqueNumber)
 
 const schema = Joi.object({
-  species: Joi.array().items({
-    speciesId: Joi.number().required().tags('PK')
-      .unique('species.[].speciesId')
-      .description('Unique ID for the species'),
-    name: Joi.string().required().max(30),
+  cities: Joi.array().items({
+    cityId: Joi.number().required().tags('PK')
+      .unique('cities.[].cityId')
+      .description('Unique ID for the city'),
+    cityName: Joi.string().required().max(50).tags('name'),
   }),
-  animals: Joi.array().items({
-    animalId: Joi.string().required().tags('PK')
-      .unique('animals.[].animalId')
-      .description('Unique ID for the animal'),
+  people: Joi.array().items({
+    personId: Joi.string().required().tags('PK')
+      .unique('people.[].personId')
+      .description('Unique ID for the person'),
     name: Joi.string().required().max(50),
-    nickname: Joi.string().optional().max(50),
-    speciesId: Joi.number().fk('species.[].speciesId').required()
-      .label('Species'),
-    offspring: Joi.array().items({
-      animalId: Joi.string().required().tags('PK')
-        .fk('animals.[].animalId')
+    nickname: Joi.string().optional().max(50).allow(''),
+    homeCityId: Joi.number().fk('cities.[].cityId').required()
+      .label('Home City'),
+    children: Joi.array().items({
+      personId: Joi.string().required().tags('PK')
+        .fk('people.[].personId')
     }),  
   }),
 });
 
+// generate some random data
+
 const data = {
-  species: [
-    { speciesId: 1, name: 'Tiger' },
-    { speciesId: 2, name: 'Koala' },
-    { speciesId: 3, name: 'African Elephant' },
-  ],
-  animals: [
-    { animalId: 'tim.tiger', name: 'Timothy', speciesId: 1, 
-      nickname: 'Tim',
-      offspring: [{ animalId: 'tessatiger' }],
-    },
-    { animalId: 'tessatiger', name: 'Theresa', speciesId: 1 },
-    { animalId: 'kevinkoala', name: 'Kevin', speciesId: 2 }
-  ]
+  cities: cities.map((item, index) => ({
+    cityId: index,
+    cityName: item.cityName,
+  })),
+  people: people.map((item, index) => ({
+    personId: `PN${index}`,
+    name: item.fullName,
+    nickname: (Math.random() < 0.1) ? item.fullName.substring(0, 3) : '',
+    homeCityId: Math.floor(Math.random() * (cities.length - 1)),
+    children: people
+      .filter(childItem => childItem !== item)
+      .map((childItem, childIndex) => ({
+        personId: `PN${childIndex}`,
+      }))
+      .filter(() => Math.random() < 0.001)
+  })),
 };
 
 class MyRepository extends Repository {
