@@ -10,24 +10,29 @@ class EditArrayItem extends React.Component {
     this.selectedItems = observable([]);
     this.filter = observable({
       value: '',
+      page: 1,
     });
+    this.addItem = this.addItem.bind(this);
+    this.removeItems = this.removeItems.bind(this);
+    this.checkboxChanged = this.checkboxChanged.bind(this);
+    this.filterChanged = this.filterChanged.bind(this);
   }
 
   componentDidMount() {
     this.props.repository.loadSummary(this.props.objectPath);
-    this.addItem = this.addItem.bind(this);
-    this.removeItems = this.removeItems.bind(this);
-    this.checkboxChanged = this.checkboxChanged.bind(this);
   }
 
   addItem() {
-    const data = this.props.repository.getSummary(this.props.objectPath);
+    const {
+      objectPath, repository, basePath = '', history,
+    } = this.props;
+    const data = repository.getSummary(objectPath);
     if (!data) {
-      utils.initialiseArray(this.props.objectPath,
-        this.props.repository.schemaDescription, this.props.repository.data);
+      utils.initialiseArray(objectPath,
+        repository.schemaDescription, repository.data);
     }
-    const newObjectPath = this.props.repository.addItem(this.props.objectPath);
-    this.props.history.push(utils.dotPathToUrlPath(newObjectPath, this.props.basePath || ''));
+    const newObjectPath = repository.addItem(objectPath);
+    history.push(utils.dotPathToUrlPath(newObjectPath, basePath || ''));
   }
 
   removeItems() {
@@ -43,6 +48,11 @@ class EditArrayItem extends React.Component {
     }
   }
 
+  filterChanged(event) {
+    this.filter.value = event.target.value;
+    this.filter.page = 1;
+  }
+
   render() {
     const {
       objectPath, itemSchema, repository, basePath = '',
@@ -50,16 +60,17 @@ class EditArrayItem extends React.Component {
     if (!repository.summaryIsLoaded(objectPath)) {
       return <div>Loading...</div>;
     }
-    const data = repository.getSummary(this.props.objectPath);
+    const data = repository.getSummary(objectPath, itemSchema.items[0],
+      this.filter.page, this.filter.value);
 
-    const items = (data || [])
+    const items = data.item
       .map(item => ({
         displayName: utils.getItemDisplayName(item, itemSchema.items[0]),
         itemPath: utils.getArrayItemPath(item, itemSchema, objectPath),
       }))
       .filter(item => (!this.filter.value)
         || item.displayName.toUpperCase().includes(this.filter.value.toUpperCase()))
-      .sort((a, b) => a.displayName.localeCompare(b.displayName))
+      // .sort((a, b) => a.displayName.localeCompare(b.displayName))
       .map((item, index) => <div className="shed-array-item" key={index}>
           <input type="checkbox" checked={this.selectedItems.includes(item.itemPath)}
             onChange={(event) => { this.checkboxChanged(event, item.itemPath); }}
@@ -72,14 +83,26 @@ class EditArrayItem extends React.Component {
           </Link>
         </div>);
     return <div className="shed-array-view">
-    <div className="shed-array-controls">
-      <div className="shed-array-count">
-        {items.length === 1 ? '1 Item' : `${items.length} Items`}
+    <div className="shed-page-controls">
+      <div className={data.page > 1 ? 'shed-page-prev' : 'shed-page-prev disabled'}
+        onClick={() => { if (data.page > 1) { this.filter.page -= 1; } }}
+      >
+        &lt;
       </div>
+      <div className="shed-page-number">
+        Page {data.page} of {data.totalPages}
+      </div>
+      <div className={data.page < data.totalPages ? 'shed-page-next' : 'shed-page-next disabled'}
+        onClick={() => { if (data.page < data.totalPages) { this.filter.page += 1; } } }
+      >
+          &gt;
+        </div>
+    </div>
+    <div className="shed-array-controls">
       <div className="shed-array-filter">
         <input type="text" placeholder="Filter..."
           value={this.filter.value}
-          onChange={(event) => { this.filter.value = event.target.value; }}
+          onChange={this.filterChanged}
         />
       </div>
       <div className="shed-array-add"

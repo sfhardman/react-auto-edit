@@ -127,6 +127,13 @@ const getItemDisplayName = (item, itemSchema) => {
     return item.name;
   }
 
+  const nameField = Object.getOwnPropertyNames(itemSchema.children)
+    .find(fieldName => itemSchema.children[fieldName].tags
+      && itemSchema.children[fieldName].tags.includes('name'));
+  if (nameField && item[nameField]) {
+    return item[nameField];
+  }
+
   const pks = Object.getOwnPropertyNames(itemSchema.children)
     .filter(fieldName => fieldIsPk(itemSchema.children[fieldName]))
     .map(fieldName => item[fieldName])
@@ -136,7 +143,8 @@ const getItemDisplayName = (item, itemSchema) => {
     return pks.join(' - ');
   }
 
-  return 'unknown';
+  // first field of object should be better than nothing...
+  return item[Object.getOwnPropertyNames(itemSchema.children)[0]];
 };
 
 const getItemId = (item, itemSchema) => {
@@ -297,6 +305,12 @@ const joiPathToDotPath = (joiPath, schema, data, dotPath = []) => {
   );
 };
 
+// const sort = (array, schema, dotPath) => {
+//   const itemSchema = getSchemaForPath(dotPath, schema);
+//   return array.slice().sort((a, b) => getItemDisplayName(a, itemSchema)
+//     .localeCompare(getItemDisplayName(b, itemSchema)));
+// };
+
 export default {
   getSchemaForPath,
   getFieldDisplayName,
@@ -317,4 +331,5 @@ export default {
   initialiseArray,
   getErrorsForItem,
   joiPathToDotPath,
+  // sort,
 };

@@ -169,4 +169,78 @@ describe('utils', () => {
       expect(result).toEqual('');
     });
   });
+  describe('getItemDisplayName', () => {
+    it('returns the combined PK fields if there are no name fields', () => {
+      const schema = Joi.object({
+        id1: Joi.string().tags('PK'),
+        id2: Joi.number().tags('PK'),
+        other: Joi.string(),
+      });
+      const result = utils.getItemDisplayName({
+        id1: 'a',
+        id2: 1,
+        other: 'c',
+      }, schema.describe());
+      expect(result).toEqual('a - 1');
+    });
+    it('returns the field tagged as "name"', () => {
+      const schema = Joi.object({
+        id1: Joi.string().tags('PK'),
+        id2: Joi.string().tags('name'),
+        name: Joi.string(),
+      });
+      const result = utils.getItemDisplayName({
+        id1: 'a',
+        id2: 'b',
+        other: 'c',
+      }, schema.describe());
+      expect(result).toEqual('b');
+    });
+    it('returns the field named "name" if there is one', () => {
+      const schema = Joi.object({
+        id1: Joi.string().tags('PK'),
+        name: Joi.string(),
+      });
+      const result = utils.getItemDisplayName({
+        id1: 'a',
+        name: 'c',
+      }, schema.describe());
+      expect(result).toEqual('c');
+    });
+    it('returns the first field if there\'s nothing else useful', () => {
+      const schema = Joi.object({
+        id1: Joi.string(),
+        other: Joi.string(),
+      });
+      const result = utils.getItemDisplayName({
+        id1: 'a',
+        other: 'c',
+      }, schema.describe());
+      expect(result).toEqual('a');
+    });
+  });
+  // describe('sort', () => {
+  //   it('sorts on the name field', () => {
+  //     const schema = Joi.object({
+  //       items: Joi.array().items({
+  //         nm: Joi.string().tags('name'),
+  //         other: Joi.string(),
+  //       }),
+  //     });
+  //     const data = {
+  //       items: [
+  //         { nm: 'c', other: 'a' },
+  //         { nm: 'a', other: 'b' },
+  //         { nm: 'b', other: 'b' },
+  //       ],
+  //     };
+
+  //     const result = utils.sort(data.items, schema.describe(), 'items.[]');
+  //     expect(result).toMatchObject([
+  //       { nm: 'a', other: 'b' },
+  //       { nm: 'b', other: 'b' },
+  //       { nm: 'c', other: 'a' },
+  //     ]);
+  //   });
+  // });
 });

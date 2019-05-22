@@ -27,7 +27,7 @@ class FkEditField extends React.Component {
       const fkItemSchema = utils
         .getSchemaForPath(utils.getParentPath(fkPath), fullSchemaDescription);
 
-      const fkItems = repository.getSummary(utils.getParentPath(fkPath));
+      const fkItems = repository.getSummary(utils.getParentPath(fkPath), fkItemSchema);
       if (fkItems) {
         fkOptions.push(...fkItems.map(fkItem => ({
           name: utils.getItemDisplayName(fkItem, fkItemSchema),

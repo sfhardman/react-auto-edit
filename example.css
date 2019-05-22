@@ -239,3 +239,54 @@ a:hover.shed-array-link div {
   background-color: white;
   color: gray;
 }
+
+.shed-page-controls {
+  display: inline-block;
+}
+
+.shed-page-controls div {
+  display: inline-block;
+}
+
+.shed-page-prev {
+  cursor: pointer;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  padding: 0px 4px 0px 4px;
+}
+
+.shed-page-prev:hover {
+  background-color: gray;
+  color: white;
+}
+
+.shed-page-prev.disabled {
+ color: gray;
+ border-color: gray;
+}
+
+.shed-page-prev.disabled:hover {
+  background-color: white;
+  color: gray;
+  cursor: default;
+}
+
+.shed-page-next {
+  cursor: pointer;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  padding: 0px 4px 0px 4px;
+}
+
+.shed-page-next.disabled:hover {
+  background-color: white;
+  color: gray;
+  cursor: default;
+}
+
+.shed-page-next:hover {
+  background-color: gray;
+  color: white;
+}

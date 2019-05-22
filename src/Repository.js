@@ -7,8 +7,9 @@ import utils from './utils';
 const validationIntervalMs = 250;
 
 class Repository {
-  constructor(schema, data = {}) {
+  constructor(schema, data = {}, pageSize = 20) {
     this.schema = schema;
+    this.pageSize = pageSize;
     this.schemaDescription = schema.describe();
     this.data = observable(data);
     this.modelState = observable({
@@ -41,11 +42,34 @@ class Repository {
     return true;
   }
 
-  getSummary(objectPath) {
+  getSummary(objectPath, itemSchema, pageNumber, filterValue) {
     // assuming all data gets loaded into repository._data
     // and we just need to pick it out
-    return utils
-      .getItemForPath(objectPath, this.schemaDescription, this.data);
+    const item = utils.getItemForPath(objectPath, this.schemaDescription, this.data);
+    if (!Array.isArray(item)) {
+      return item;
+    }
+    const array = item
+      .map(x => ({
+        object: x,
+        displayName: utils.getItemDisplayName(x, itemSchema),
+      }))
+      .filter(x => (!filterValue)
+        || (x.displayName.toUpperCase().includes(filterValue.toUpperCase())))
+      .sort((a, b) => a.displayName.localeCompare(b.displayName))
+      .map(x => x.object);
+
+    if (pageNumber) {
+      const minIndex = (pageNumber * this.pageSize) - this.pageSize;
+      const maxIndex = minIndex + this.pageSize - 1;
+      return {
+        count: array.length,
+        page: pageNumber,
+        totalPages: Math.ceil(array.length / this.pageSize),
+        item: array.filter((x, index) => (index >= minIndex) && (index <= maxIndex)),
+      };
+    }
+    return array;
   }
 
   // eslint-disable-next-line no-unused-vars
