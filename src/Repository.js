@@ -1,4 +1,6 @@
-import { observable } from 'mobx';
+import {
+  observable, keys, remove, extendObservable,
+} from 'mobx';
 import Joi from 'joi';
 import utils from './utils';
 
@@ -30,6 +32,12 @@ class Repository {
     this.modelState.errors.clear();
   }
 
+  async reset(newData = {}) {
+    this.clearDirty();
+    keys(this.data).forEach(key => remove(this.data, key));
+    extendObservable(this.data, newData);
+  }
+
   // eslint-disable-next-line no-unused-vars
   async loadSummary(objectPath) {
     // in the most basic scenario all the data
@@ -57,12 +65,15 @@ class Repository {
     // and we just need to pick it out
     const item = utils.getItemForPath(objectPath, this.schemaDescription, this.data);
     if (!item) {
-      return {
-        array: undefined,
-        totalPages: 1,
-        page: pageNumber,
-        count: 0,
-      };
+      if (pageNumber) {
+        return {
+          array: undefined,
+          totalPages: 1,
+          page: pageNumber,
+          count: 0,
+        };
+      }
+      return item;
     }
     const array = item
       .map(x => ({

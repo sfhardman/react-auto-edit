@@ -284,6 +284,9 @@ const joiPathToDotPath = (joiPath, schema, data, dotPath = []) => {
   }
   const currentChunk = joiPath[0];
   const item = data[currentChunk];
+  if (!item) {
+    return '';
+  }
   const nextJoiPath = joiPath
     .filter((filterItem, index) => index > 0);
   let nextDotPath;

@@ -5,8 +5,6 @@ import VanillaJoi from 'joi';
 import JoiFk from 'joi-fk-extension';
 import JoiUniqueValue from 'joi-unique-value-extension';
 import { Nav, Repository, GenericRoute, Validation, Save, Cancel } from 'react-auto-edit';
-import cities from './cities';
-import people from './people';
 
 import 'react-auto-edit/example.css';
 
@@ -38,52 +36,34 @@ const schema = Joi.object({
   }),
 });
 
-// generate some random data
-
-const data = {
-  cities: cities.map((item, index) => ({
-    cityId: index,
-    cityName: item.cityName,
-  })),
-  people: people.map((item, index) => ({
-    personId: `PN${index}`,
-    name: item.fullName,
-    nickname: (Math.random() < 0.1) ? item.fullName.substring(0, 3) : '',
-    homeCityId: Math.floor(Math.random() * (cities.length - 1)),
-    children: people
-      .filter(childItem => childItem !== item)
-      .map((childItem, childIndex) => ({
-        personId: `PN${childIndex}`,
-      }))
-      .filter(() => Math.random() < 0.001)
-  })),
-};
-
 class MyRepository extends Repository {
   async save() {
     alert('I don\'t do anything in this example');
   }
 
+  async load() {
+    const response = await fetch('/data/data.json');
+    const newData = await response.json();
+    this.reset(newData);
+  }
+
   async cancel() {
-    alert('I don\'t do anything in this example');
+    await this.load();
   }
 }
 
-const repository = new MyRepository(schema, data);
+const App = ({ repository }) => <Router>
+  <Nav repository={repository}/>
+  <Validation repository={repository}/>
+  <Save repository={repository}/>
+  <Cancel repository={repository}/>
+  <GenericRoute repository={repository}/>
+</Router>;
 
-function App() {
-  return (
-    <Router>
-      <Nav repository={repository}/>
-      <Validation repository={repository}/>
-      <Save repository={repository}/>
-      <Cancel repository={repository}/>
-      <GenericRoute repository={repository}/>
-    </Router>
-  );
-}
+const repository = new MyRepository(schema, {});
+ReactDOM.render(<App repository={repository} />, document.getElementById('root'));
 
+repository.load();
 
-
-ReactDOM.render(<App />, document.getElementById('root'));
+  
 

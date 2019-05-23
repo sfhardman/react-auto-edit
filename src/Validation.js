@@ -9,6 +9,7 @@ const validation = ({ repository, basePath = '' }) => {
   if (repository.modelState.errors.length) {
     const errors = repository.modelState.errors
       .map((err, index) => {
+        console.log(err);
         const dotPath = utils
           .joiPathToDotPath(err.path, schemaDescription, repository.data);
         return <div key={index}>
