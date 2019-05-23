@@ -8,7 +8,7 @@ const numberEditField = ({
   value={item[fieldName]}
   onChange={(event) => {
     // eslint-disable-next-line no-param-reassign
-    item[fieldName] = event.target.value;
+    item[fieldName] = Number(event.target.value);
     onChange();
   }}/>;
 

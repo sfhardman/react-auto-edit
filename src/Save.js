@@ -2,7 +2,7 @@ import React from 'react'; // eslint-disable-line no-unused-vars
 import { observer } from 'mobx-react';
 
 const save = ({ repository }) => {
-  if (repository.modelState.isDirty) {
+  if (repository.isDirty()) {
     return <div className="shed-save-control"
       onClick={() => repository.save()}>
       save

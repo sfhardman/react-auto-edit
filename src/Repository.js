@@ -21,6 +21,10 @@ class Repository {
     window.setTimeout(() => this.validateIfNeeded(), validationIntervalMs);
   }
 
+  isDirty() {
+    return this.modelState.isDirty;
+  }
+
   setDirty() {
     this.modelState.isDirty = true;
     this.needValidation = true;
@@ -154,7 +158,7 @@ class Repository {
     window.setTimeout(() => this.validateIfNeeded(), validationIntervalMs);
   }
 
-  validate() {
+  innerValidate() {
     const validationResult = Joi.validate(
       this.data,
       this.schema,
@@ -165,6 +169,11 @@ class Repository {
         abortEarly: false,
       },
     );
+    return validationResult;
+  }
+
+  validate() {
+    const validationResult = this.innerValidate();
     if (validationResult.error) {
       this.modelState.errors.replace(validationResult.error.details);
     } else if (this.modelState.errors.length) {

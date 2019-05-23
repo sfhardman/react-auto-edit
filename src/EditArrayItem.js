@@ -22,6 +22,12 @@ class EditArrayItem extends React.Component {
     this.props.repository.loadSummary(this.props.objectPath);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.objectPath !== this.props.objectPath) {
+      this.props.repository.loadSummary(this.props.objectPath);
+    }
+  }
+
   addItem() {
     const {
       objectPath, repository, basePath = '', history,

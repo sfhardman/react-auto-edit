@@ -1,5 +1,5 @@
 {
-  "name": "in-memory-dataset",
+  "name": "simple-load-on-demand",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

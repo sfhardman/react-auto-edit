@@ -14,6 +14,13 @@ class FkEditField extends React.Component {
       .forEach(fkPath => this.props.repository.loadSummary(utils.getParentPath(fkPath)));
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.fieldName !== this.props.fieldName) {
+      utils.getFkPaths(this.props.fieldSchema)
+        .forEach(fkPath => this.props.repository.loadSummary(utils.getParentPath(fkPath)));
+    }
+  }
+
   selectionChanged(selected) {
     const { item, fieldName, onChange } = this.props;
     item[fieldName] = selected ? selected.value : undefined;
