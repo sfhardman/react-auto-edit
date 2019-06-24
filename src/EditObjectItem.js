@@ -52,7 +52,10 @@ class EditObjectItem extends React.Component {
 
     const fields = Object.getOwnPropertyNames(itemSchema.children)
       .map((fieldName) => {
-        const fieldSchema = itemSchema.children[fieldName];
+        let fieldSchema = itemSchema.children[fieldName];
+        if ((fieldSchema.type === 'alternatives') && fieldSchema.base) {
+          fieldSchema = fieldSchema.base;
+        }
         const fieldErrors = errors
           .filter(err => err.fieldName === fieldName)
           .map(err => err.error);
